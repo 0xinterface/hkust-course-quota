@@ -3,12 +3,11 @@ import cheerio from 'cheerio';
 
 export default class {
 	constructor(){
-		this.base = 'https://w5.ab.ust.hk/wcq/cgi-bin/1630/subject/';
-		this.defaultDepartment = 'COMP';
+		axios.get('https://w5.ab.ust.hk/wcq/cgi-bin/').thencl;
 	}
 
 	all(){
-		return axios.get(this.base + this.defaultDepartment).then( (response) => {
+		return axios.get(this.base).then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.depts>a').map((i, ctx) => {
 				return $(ctx).text();
@@ -17,7 +16,7 @@ export default class {
 	}
 
 	subjects(department){
-		return axios.get(this.base + department).then( (response) => {
+		return axios.get(this.base + 'subject/' + department).then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.course').map((i, ctx) => {
 				return {
