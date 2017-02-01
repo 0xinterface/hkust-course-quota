@@ -3,11 +3,16 @@ import cheerio from 'cheerio';
 
 export default class {
 	constructor(){
-		axios.get('https://w5.ab.ust.hk/wcq/cgi-bin/').thencl;
+		let self = this;
+		axios.get('https://w5.ab.ust.hk/wcq/cgi-bin/').then( (response) => {
+			let $ = cheerio.load(response.data);
+			self.base = `https://w5.ab.ust.hk/wcq/cgi-bin/${$('div.termselect>a').first().attr('href').split('/')[3]}`;
+		});
 	}
 
 	all(){
-		return axios.get(this.base).then( (response) => {
+		console.log(this.base);
+		return axios.get('https://w5.ab.ust.hk/wcq/cgi-bin/').then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.depts>a').map((i, ctx) => {
 				return $(ctx).text();
@@ -16,7 +21,8 @@ export default class {
 	}
 
 	subjects(department){
-		return axios.get(this.base + 'subject/' + department).then( (response) => {
+		console.log(this.base);
+		return axios.get(this.base + '/subject/' + department).then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.course').map((i, ctx) => {
 				return {

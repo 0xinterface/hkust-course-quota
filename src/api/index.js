@@ -5,7 +5,7 @@ import Course from '../lib/course';
 
 export default ({ config, db }) => {
 	let api = Router();
-	let c = new Course('https://w5.ab.ust.hk/wcq/cgi-bin/1630/subject/COMP');
+	let c = new Course();
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));
 
