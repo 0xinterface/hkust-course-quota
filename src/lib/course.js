@@ -11,7 +11,6 @@ export default class {
 	}
 
 	all(){
-		console.log(this.base);
 		return axios.get('https://w5.ab.ust.hk/wcq/cgi-bin/').then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.depts>a').map((i, ctx) => {
@@ -21,13 +20,15 @@ export default class {
 	}
 
 	subjects(department){
-		console.log(this.base);
 		return axios.get(this.base + '/subject/' + department).then( (response) => {
 			let $ = cheerio.load(response.data);
 			return $('.course').map((i, ctx) => {
 				return {
 					code: $(ctx).find('.courseanchor>a').attr('name'),
 					name: $(ctx).find('h2').text().split('- ')[1].split(' (')[0],
+					description: $(ctx).find('div.popupdetail>table>tr>th').filter( (i, c) => {
+						return $(c).text() == "DESCRIPTION"
+					}).siblings().text(),
 					sections: $(ctx).find('tr.newsect').map((i, d) => {
 						let s = $(d).find('td').first().text().split(' (')[0];
 						let r = $(d).find('td').first().text().split(' (')[1].split(')')[0];
